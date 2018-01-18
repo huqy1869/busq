@@ -19,7 +19,19 @@ def remove_space(string):
     return string[0:length]
 
 #santinise user details input
-def valid_signup(username_first,username_last, password, email, confirmpassword):
+def valid_signup(cookie, username_first,username_last, password, email, confirmpassword, host, db, user, pwd):
+	
+	conn = mysql.connector.connect(host = host, database = db,user = user,password = pwd)
+	cursor = conn.cursor(buffered=True)
+	query = ("SELECT has_signed_up FROM user_table WHERE userid = \"" + cookie + "\"")
+	cursor.execute(query)
+	for(has_signed_up) in cursor:
+		has_signed_up = str(has_signed_up)
+	cursor.close()
+    conn.close()
+    if (has_signed_up == '1'):
+		print "An account already existing in this device"
+		return 'An account already existing in this device'
 	
 	
 	if(len(str(email))>=255 or validate_email(str(email)) == False):
@@ -43,6 +55,7 @@ def valid_signup(username_first,username_last, password, email, confirmpassword)
 	
 	if (len(str(confirmpassword)) != 6 or str(password) != str(confirmpassword)):
 		return 'Not the same password'
+		
 
 	return True
 	
@@ -82,35 +95,44 @@ def appdb_verify_logindetails(email, password, current_cookie, host, db, user, p
 	user_firstname = None
 	conn = mysql.connector.connect(host = host, database = db,user = user,password = pwd)
 	cursor = conn.cursor(buffered=True)
-	#print type(email)
 	query = ("SELECT userid FROM user_table WHERE email = \"" + email + "\" and password = '" + password + "'")
 	cursor.execute(query)
-	for(userid) in cursor:
+	for(userid, has_signed_up) in cursor:
 		cookie = userid[0]
 	rowcount = cursor.rowcount
 	print cookie
-    
+	
+	query1 = ("SELECT has_signed_up FROM user_table WHERE userid = \"" + current_cookie + "\"")
+	cursor.execute(query1)
+	for(has_signed_up) in cursor:
+		has_signed_up = str(has_signed_up)
+	
 	if rowcount == 1:
 		#check if one userdetail matches two user ids
-		if (cookie != current_cookie):
+		if (cookie != current_cookie and has_signed_up == '0'):
 			#Update scan_count
-			query0 = ("UPDATE user_table SET stat_numscans = stat_numscans + 1 WHERE userid = \"" + cookie + "\"")
-			cursor.execute(query0)
+			query2 = ("UPDATE user_table SET stat_numscans = stat_numscans + 1 WHERE userid = \"" + cookie + "\"")##+1 not ok
+			cursor.execute(query2)
 			#delete the new cookie
-			query1 = ("DELETE from user_table WHERE userid = \"" + current_cookie + "\" ")
-			cursor.execute(query1)
+			query3 = ("DELETE from user_table WHERE userid = \"" + current_cookie + "\" ")
+			cursor.execute(query3)
 			#set the old cookie in user device
+		else if (cookie != current_cookie and has_signed_up == '1'):
+			#this user tried to login in others' device
+			cookie = None
+			return (user_firstname, cookie)
+			
 			
 		
 		#fetch firstname
-		query2 = ("SELECT firstname FROM user_table "
+		query4 = ("SELECT firstname FROM user_table "
              "WHERE email = \"" + email + "\"")
-		cursor.execute(query2)
+		cursor.execute(query4)
 		for(firstname) in cursor:
 			user_firstname = str(firstname)
-		query3 = ("UPDATE user_table SET login_status = '1' "
+		query5 = ("UPDATE user_table SET login_status = '1' "
          "WHERE email = \"" + email + "\"")
-		cursor.execute(query3)
+		cursor.execute(query5)
 		
         
 
@@ -324,10 +346,11 @@ def login():
 				r.set_cookie('Name', cookie, expires=outdate)
 				return r
 
-				
+			else if (firstname == None and cookie == None):
+				valid = 'Please use your own device to login.'	
              
 			else:
-				valid = 'Incorrect user details. Please try again!'
+				valid = 'Incorrect user details. Please try again or signup!'
         
         
     
@@ -343,7 +366,6 @@ def login():
 @app.route("/signup", methods=['GET','POST'])  
 def signup():
     name=request.cookies.get('Name')
-    valid_signup_status = None
     valid = ''
     if request.method=='POST':   #what if it's not post           
         username_first = request.form['firstname'] 
@@ -351,7 +373,7 @@ def signup():
         password = request.form['password']
         email = request.form['email']
         confirmpassword = request.form['confirmpassword']
-        valid = valid_signup(remove_space(username_first), remove_space(username_last), password, email, confirmpassword)
+        valid = valid_signup(name, remove_space(username_first), remove_space(username_last), password, email, confirmpassword, host, db, user, pwd)
         if valid == True : 
 			appdb_update_signupdetails(username_first, username_last, email, password, name, host, db, user, pwd)#sign in status?
 			#count - 1
@@ -399,9 +421,10 @@ def bstop():
        #randomly generate a string with user ID inside and set it as a cookie
        Random = randomString(16)
        name = Random
-       
-       #send the new cookie to Rachel
+       #send the new cookie to AppDB
        appdb_adduser(name, host, db, user, pwd)
+       
+	
   
        
     
