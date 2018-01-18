@@ -284,6 +284,33 @@ def appdb_adduser(user_cookie, host, db, user, pwd):
     cursor.close()
     conn.close()
 
+def appdb_update_mergeruser(userid, newuserid):
+    conn = mysql.connector.connect(host='localhost',
+                                           database='busqdb',
+                                           user='busq',
+                                           password='be a morning person')
+    cursor = conn.cursor()
+
+    #fetech numscans for userid
+    query = "SELECT stat_numscans, stat_reward_placeholder FROM user_table WHERE userid = \"" +userid+ "\""
+    cursor.execute(query)   
+    for(stat_numscans, stat_reward_placeholder) in cursor:
+        numscans = str(stat_numscans)
+        rewards = str(stat_reward_placeholder)
+
+    #print "numscnas is ", numscans, ". rewards, is ", rewards
+
+    #merge userid details with newuserid
+    #query = "UPDATE user_table, stat_reward_placeholder SET stat_numscans=stat_numscans+" +numscans+ ", stat_reward_placeholder=stat_reward_placeholder+" +rewards+ "WHERE userid = \"" +newuserid+ "\""
+
+    query = "UPDATE user_table SET stat_numscans=stat_numscans+" +numscans+ " WHERE userid = \"" +newuserid+ "\""
+
+    print query
+    cursor.execute(query)
+    conn.commit()
+
+    cursor.close()
+    conn.close()
 
 #generate a random string
 def randomString(n):
