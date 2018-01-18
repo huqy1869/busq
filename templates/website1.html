@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+<style>
+
+body
+{
+	margin: 0;
+	padding: 0;
+	font-family: "-apple-system", "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
+	color: #666;
+}
+
+.header
+{
+	padding: 0.8rem;
+	text-align: center;
+	border-bottom: 0.1rem solid #ccc;
+	font-size: 110%;
+	color: #666;
+}
+
+.box
+{
+	margin: 1rem;
+	padding: 1rem;
+	
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.debuginfo
+{
+   color:#cccccc;
+   font-size:70%;
+   margin: 1rem;
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="header">
+  UNSW 891 QUEUE TRACKER
+</div>
+
+<div class="box">
+  <p><font size="4">Wait Time: {{wait_time}} mins</p>
+  <p><font size="4">The 893 queue is 3 mins shorter.</p>
+</div>
+
+<div class="box">
+  <p><font size="4">Welcome back User.</p>
+  <p><font size="4">You have scanned Z times. To redeem rewards please <a href="url">sign up</a>.</p>
+</div>
+	
+<div class="debuginfo">
+	<p>User Name: {{user_name}}</p>
+	<p>Time: {{time}}</p>
+	<p>Updated Time: {{TimeStamp}}</p>
+	<p>QR Code: {{uuid}}</p>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+
+    <link rel="stylesheet" type="text/css" href="static/ionic.css">
+
+
+
+<style>
+
+
+
+
+
+body
+
+{
+
+	margin: 0;
+
+	padding: 0;
+
+	font-family: "-apple-system", "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
+
+	color: #666;
+
+	
+
+	height: 100%;
+
+}
+
+html { height:100%;}
+
+
+
+.jessie-button
+
+{
+
+     margin-left:2rem;
+
+	 margin-right:2rem;
+
+	 margin-top:2rem;
+
+	 display:block;
+
+	 padding:1rem;
+
+	 background-color:#387ef5;
+
+	 color:white;
+
+	 width: calc( 100% - 4rem );
+
+	 border-color:transparent;
+
+	 border-radius:0.5rem;
+
+	 
+
+	 }
+
+.valid
+{
+	margin-top:4rem;
+	margin-left:2rem;
+	}
+
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+
+<div class="bar bar-header bar-light">
+
+  <h1 class="title">User Sign Up</h1>
+
+</div>
+
+
+
+<div class="list has-header">
+
+<form action="" method="post">     <!--set the method to be "POST"-->
+
+  <label class="item item-input item-stacked-label">
+
+    <input type="text" placeholder="First Name" name="firstname"value="{{request.form.firstname}}">  <!--input username-->
+
+  </label>
+  
+    <label class="item item-input item-stacked-label">
+
+    <input type="text" placeholder="Last Name" name="lastname"value="{{request.form.lastname}}">  <!--input username-->
+
+  </label>
+
+  <label class="item item-input item-stacked-label">
+
+    <input type="text" placeholder="Email" name="email" value="{{request.form.email}}">   <!--input email-->
+
+  </label>
+
+
+
+  <label class="item item-input item-stacked-label">
+
+
+
+    <input type="password" placeholder="Password" name="password" value="{{request.form.password}}">  <!--input password-->
+
+  </label>
+
+	<label class="item item-input item-stacked-label">
+
+
+
+    <input type="password" placeholder="Confirm Password" name="confirmpassword" value="{{request.form.confirmpassword}}">  <!--input password-->
+
+  </label>
+
+  <button class="jessie-button has-header" type="submit" value="Sign Up">   <!--when click sign in button, all information will be sent to server-->
+                                                                            <!--in python file "request.form['username']" will get the username from this login website-->
+  Sign Up
+
+</button>
+
+</form>
+
+</div>
+
+<div class="valid">
+<p><font color="red">{{valid_signup_status}}</font></p>
+</div>
+
+
+
+
+
+</body>
+
+</html>

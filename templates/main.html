@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    
+
+<style>
+
+body
+{
+	margin: 0;
+	padding: 0;
+	font-family: "-apple-system", "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
+	color: #666;
+	font-size:4;
+}
+
+.header
+{
+	padding: 0.8rem;
+	text-align: center;
+	border-bottom: 0.1rem solid #ccc;
+	font-size: 110%;
+	color: #666;
+}
+
+.box
+{
+	margin: 1rem;
+	padding: 0.1rem 1rem;
+	
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.debuginfo
+{
+   color:#cccccc;
+   font-size:70%;
+   margin: 1rem;
+}
+
+.hidden {
+ display: none;
+}
+.icon{
+    height:1.3rem;
+	width:auto;
+	margin-bottom: -0.3rem;
+}
+
+</style>
+
+</head>
+<body>
+
+
+<div class="header">
+  UNSW 891 QUEUE TRACKER
+</div>
+
+<div class="box">
+  <p>Thank you for scanning.</p>
+  <p>Welcome {{firstname}}</p>
+  <p>You have scanned {{N}} times.</p>
+</div>
+ 
+	
+<div class="box">
+  <p>{{reward_info}}</p>
+
+</div>
+
+	
+<div class="box">
+  <p>Approximate Wait Time: {{wait_time}} mins</p>
+  <p class='iconline'>
+    <img src="static/information-circled.png" alt="info" class="icon">
+    Significant Delays!
+  </p>
+</div>
+
+<div class="debuginfo">
+	<p>User Name: {{user_name}}</p>
+	<p>Time: {{time}}</p>
+	<p>Updated Time: {{TimeStamp}}</p>
+	<p>QR Code: {{uuid}}</p>
+</div>
+
+</body>
+</html>
+
